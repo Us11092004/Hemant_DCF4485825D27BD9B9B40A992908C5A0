@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang=‖en‖>
+<head>
+ <meta charset=‖UTF-8‖>
+ <meta http-equiv=‖X-UA-Compatible‖ content=‖IE=edge‖>
+ <meta name=‖viewport‖ content=‖width=device-width, initial-scale=1.0‖>
+ <link rel=‖stylesheet‖ href=https://use.fontawesome.com/releases/v5.15.3/css/all.css
+integrity=‖sha384-
+SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk‖
+crossorigin=‖anonymous‖>
+ <link rel=‖preconnect‖ href=https://fonts.gstatic.com>
+ <link
+href=https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;70
+0;800;900&display=swap rel=‖stylesheet‖>
+ <link rel=‖stylesheet‖ href=‖css/index.css‖>
+ <link rel=‖stylesheet‖ href=‖css/navbar.css‖>
+ <link rel=‖stylesheet‖ href=‖css/footer.css‖>
+ <title>UPM Bank</title>
+</head>
+<body>
+ <?php include ‗partials/_navbar.php‘; ?>
+
+ <div class=‖cover‖></div>
+ <div class=‖container‖>
+ <div class=‖welcome‖>
+ <h3>Welcome to </h3>
+ <h1>Union Private Mini Bank</h1>
+ </div>
+ <div class=‖allbtns‖>
+ <a href=‖all_user.php‖><button type=‖button‖><I class=‖fas fa-users‖></i> ALL
+USERS &nbsp;&nbsp;&nbsp; </button></a>
+ <a href=‖create_user.php‖><button type=‖button‖><I class=‖fas fa-user‖></i>
+CREATE USER &nbsp;&nbsp;&nbsp; </button></a>
+ <a href=‖transfer_money.php‖><button type=‖button‖><I class=‖fas fa-handholding-usd‖></i> TRANSFER MONEY &nbsp;&nbsp;&nbsp; </button></a>
+ <a href=‖transfer_log.php‖><button type=‖button‖><I class=‖fas fa-history‖></i>
+TRANSACTION REPORT &nbsp;&nbsp;&nbsp; </button></a>
+ </div>
+
+ </div>
+ <?php include ‗partials/_footer.php‘; ?>
+ <!—scripts 
+ <script src=‖js/navscroll.js‖></script>
+</body>
+
+</html>
+All user :
+<?php
+If ($_SERVER[―REQUEST_METHOD‖] == ―POST‖) {
+ Include ‗partials/_dbconnect.php‘;
+ // Check if POST data exists
+ If (isset($_POST[‗name‘]) && isset($_POST[‗email‘]) && isset($_POST[‗amount‘])) {
+ $name = $_POST[‗name‘];
+ $email = $_POST[‗email‘];
+ $amount = $_POST[‗amount‘];
+ // Check whether this user email exists
+ $existSql = ―SELECT * FROM `users` WHERE email = ?‖;
+ $stmt = $conn->prepare($existSql);
+ $stmt->bind_param(―s‖, $email);
+ $stmt->execute();
+ $result = $stmt->get_result();
+ $numExistRow = $result->num_rows;
+ If ($numExistRow > 0) {
+ // if user already exists
+ Echo ―<script> alert(‗Email Already Exist !! Please use another Email‘); </script>‖;
+
+
+ } else {
+ // Inserting new user data
+ $sql = ―INSERT INTO `users` (`name`, `email`, `amount`) VALUES (?, ?, ?)‖;
+ $stmt = $conn->prepare($sql);
+ $stmt->bind_param(―sss‖, $name, $email, $amount);
+ $stmt->execute();
+
+ If ($stmt->affected_rows > 0) {
+ Echo ―<script> alert(‗Congrats!! New User added‘); </script>‖;
+ } else {
+ Echo ―<script> alert(‗Error adding new user. Please try again.‘); </script>‖;
+ }
+ }
+ } else {
+ Echo ―<script> alert(‗Please fill out all fields.‘); </script>‖;
+ }
+}
+?>
+<!DOCTYPE html>
+<html lang=‖en‖>
+<head>
+ <meta charset=‖UTF-8‖>
+
+
+ <meta http-equiv=‖X-UA-Compatible‖ content=‖IE=edge‖>
+ <meta name=‖viewport‖ content=‖width=device-width, initial-scale=1.0‖>
+ <link rel=‖stylesheet‖ href=https://use.fontawesome.com/releases/v5.15.3/css/all.css
+ Integrity=‖sha384-
+SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk‖
+crossorigin=‖anonymous‖>
+ <link rel=‖preconnect‖ href=https://fonts.gstatic.com>
+ <link
+href=https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;70
+0;800;900&display=swap
+ Rel=‖stylesheet‖>
+ <link rel=‖stylesheet‖ href=‖css/navbar.css‖>
+ <link rel=‖stylesheet‖ href=‖css/footer.css‖>
+ <link rel=‖stylesheet‖ href=‖css/index.css‖>
+ <title>ADD USER</title>
+</head>
+<body>
+ <?php include ‗partials/_navbar.php‘; ?>
+ <div class=‖cover‖></div>
+ <div class=‖create‖>
+ <h1>CREATE &nbsp; USER</h1>
+ <div class=‖createUser‖>
+ <div class=‖userimg‖>
+
+
+
+ <img src=‖images/undraw_male_avatar_323b.svg‖ alt=‖user image‖>
+ </div>
+ <div class=‖userdata‖>
+ <!—Create user Form 
+ <form method=‖POST‖>
+ <input id=‖name‖ type=‖text‖ placeholder=‖NAME‖ name=‖name‖ required>
+ <input id=‖email‖ type=‖email‖ placeholder=‖EMAIL‖ name=‖email‖
+required>
+ <input id=‖amount‖ type=‖number‖ placeholder=‖AMOUNT‖ name=‖amount‖
+required>
+ <button type=‖submit‖>ADD USER</button>
+ </form>
+ </div>
+ </div>
+ </div>
+ <?php include ‗partials/_footer.php‘; ?>
+ <!—scripts 
+ <script src=‖js/navscroll.js‖></script>
+</body>
+</html>
+
+
+Account.php:
+<?php
+Include ‗partials/_dbconnect.php‘;
+$sql = ―SELECT * FROM `users`‖;
+$result = mysqli_query($conn,$sql);
+?>
+<!DOCTYPE html>
+<html lang=‖en‖>
+<head>
+ <meta charset=‖UTF-8‖>
+ <meta http-equiv=‖X-UA-Compatible‖ content=‖IE=edge‖>
+ <meta name=‖viewport‖ content=‖width=device-width, initial-scale=1.0‖>
+ <link rel=‖stylesheet‖ href=https://use.fontawesome.com/releases/v5.15.3/css/all.css
+integrity=‖sha384-
+SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk‖
+crossorigin=‖anonymous‖>
+ <link rel=‖preconnect‖ href=https://fonts.gstatic.com>
+ <link
+href=https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;70
+0;800;900&display=swap rel=‖stylesheet‖>
+ <link rel=‖stylesheet‖ href=‖css/navbar.css‖>
+ <link rel=‖stylesheet‖ href=‖css/footer.css‖>
+ <link rel=‖stylesheet‖ href=‖css/index.css‖>
+ <link rel=‖stylesheet‖ href=‖css/table.css‖>
+ <title>ALL USERS</title>
+
+
+</head>
+<body>
+ <?php include ‗partials/_navbar.php‘; ?>
+ <div class=‖cover‖></div>
+
+ <h1>ALL &nbsp; USERS</h1>
+ <div class=‖all_users‖ style=‖height: 500px;‖>
+ <table>
+ <tr>
+ <th>ID</th>
+ <th>NAME</th>
+ <th>EMAIL</th>
+ <th>BALANCE</th>
+ </tr>
+ <?php
+ While ($row = mysqli_fetch_assoc($result)) {
+ Echo ―
+ <tr>
+ <td>‖.$row[‗id‘].‖</td>
+ <td>‖.$row[‗name‘].‖</td>
+ <td>‖.$row[‗email‘].‖</td>
+ <td>‖.$row[‗amount‘].‖</td>
+ </tr>
+ ―;
+
+
+ }
+ ?>
+ </table>
+ </div>
+ <?php include ‗partials/_footer.php‘; ?>
+ <!—script 
+ <script src=‖js/navscroll.js‖></script>
+</body>
+</html>
+Transfer process.php:
+<?php
+Include ‗partials/_dbconnect.php‘;
+$sql = ―SELECT * FROM users‖;
+$result = mysqli_query($conn,$sql);
+?>
+<!DOCTYPE html>
+<html lang=‖en‖>
+<head>
+ <meta charset=‖UTF-8‖>
+ <meta http-equiv=‖X-UA-Compatible‖ content=‖IE=edge‖>
+
+
+ <meta name=‖viewport‖ content=‖width=device-width, initial-scale=1.0‖>
+ <link rel=‖stylesheet‖ href=https://use.fontawesome.com/releases/v5.15.3/css/all.css
+integrity=‖sha384-
+SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk‖
+crossorigin=‖anonymous‖>
+ <link rel=‖preconnect‖ href=https://fonts.gstatic.com>
+ <link
+href=https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;70
+0;800;900&display=swap rel=‖stylesheet‖>
+ <link rel=‖stylesheet‖ href=‖css/navbar.css‖>
+ <link rel=‖stylesheet‖ href=‖css/footer.css‖>
+ <link rel=‖stylesheet‖ href=‖css/index.css‖>
+ <link rel=‖stylesheet‖ href=‖css/table.css‖><
+ <title>TRANSFER MONEY</title>
+</head>
+<body>
+ <?php include ‗partials/_navbar.php‘; ?>
+ <div class=‖cover‖></div>
+ <h1>TRANSFER &nbsp; MONEY</h1>
+ <div class=‖all_users‖ style=‖height: 500px;‖>
+ <table>
+ <tr>
+ <th>ID</th>
+ <th>NAME</th>
+ <th>EMAIL</th>
+
+ <th>BALANCE</th>
+ <th>OPERATION</th>
+ </tr>
+ <?php
+ While ($row = mysqli_fetch_assoc($result)) {
+ Echo ‗
+ <tr>
+ <td>‘.$row[‗id‘].‘</td>
+ <td>‘.$row[‗name‘].‘</td>
+ <td>‘.$row[‗email‘].‘</td>
+ <td>‘.$row[‗amount‘].‘</td>
+ <td id=‖transfer‖; ><a href=‖transfer_process.php?id= ‗.$row[‗id‘].‘‖> <button
+type=‖button‖>TRANSFER</button></a></td>
+ </tr>
+ ‗;
+ }
+ ?>
+ </table>
+ </div>
+ <?php include ‗partials/_footer.php‘; ?>
+ <!—script 
+ <script src=‖js/navscroll.js‖></script>
+</body>
+</html>
+
+
+Transaction log.php:
+<?php
+// Include database connection
+Include ‗partials/_dbconnect.php‘;
+// Ensure connection is successful
+If (!$conn) {
+ Die(―Connection failed: ― . mysqli_connect_error());
+}
+// Initialize variables
+$sid = null;
+$start_date = null;
+$end_date = null;
+// Check if the form is submitted
+If ($_SERVER[‗REQUEST_METHOD‘] == ‗GET‘) {
+ If (isset($_GET[‗id‘])) {
+ $sid = $_GET[‗id‘];
+ }
+ If (isset($_GET[‗start_date‘]) && isset($_GET[‗end_date‘])) {
+ $start_date = $_GET[‗start_date‘];
+ $end_date = $_GET[‗end_date‘];
+ }
+
+
+}
+// Prepare the query based on the provided parameters
+If ($sid && $start_date && $end_date) {
+ $stmt = $conn->prepare(―SELECT * FROM `transfer_process` WHERE `receiver` = ?
+AND `time` BETWEEN ? AND ? ORDER BY `time` DESC‖);
+ $stmt->bind_param(―iss‖, $sid, $start_date, $end_date);
+} elseif ($sid) {
+ $stmt = $conn->prepare(―SELECT * FROM `transfer_process` WHERE `receiver` = ?
+ORDER BY `time` DESC‖);
+ $stmt->bind_param(―I‖, $sid);
+} elseif ($start_date && $end_date) {
+ $stmt = $conn->prepare(―SELECT * FROM `transfer_process` WHERE `time`
+BETWEEN ? AND ? ORDER BY `time` DESC‖);
+ $stmt->bind_param(―ss‖, $start_date, $end_date);
+} else {
+ $stmt = $conn->prepare(―SELECT * FROM `transfer_process` ORDER BY `time`
+DESC‖);
+}
+// Execute the query and check if it‘s successful
+$stmt->execute();
+$result = $stmt->get_result();
+If (!$result) {
+ Die(―Query failed: ― . $stmt->error); // Show MySQL error
+}
+
+
+?>
+<!DOCTYPE html>
+<html lang=‖en‖>
+<head>
+ <meta charset=‖UTF-8‖>
+ <meta http-equiv=‖X-UA-Compatible‖ content=‖IE=edge‖>
+ <meta name=‖viewport‖ content=‖width=device-width, initial-scale=1.0‖>
+ <link rel=‖stylesheet‖ href=https://use.fontawesome.com/releases/v5.15.3/css/all.css
+integrity=‖sha384-
+SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk‖
+crossorigin=‖anonymous‖>
+ <link rel=‖preconnect‖ href=https://fonts.gstatic.com>
+ <link
+href=https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;70
+0;800;900&display=swap rel=‖stylesheet‖>
+ <link rel=‖stylesheet‖ href=‖css/navbar.css‖>
+ <link rel=‖stylesheet‖ href=‖css/footer.css‖>
+ <link rel=‖stylesheet‖ href=‖css/index.css‖>
+ <link rel=‖stylesheet‖ href=‖css/table.css‖>
+ <title>TRANSACTION REPORT</title>
+</head>
+<body>
+ <?php include ‗partials/_navbar.php‘ ?>
+
+
+ <div class=‖cover‖></div>
+<h1>TRANSACTION &nbsp; REPORT</h1>
+<div class=‖all_users‖ style=‖height: 500px;‖>
+ <form method=‖GET‖ action=‖transfer_log.php‖>
+ <label for=‖id‖>User ID:</label>
+ <input type=‖text‖ id=‖id‖ name=‖id‖ value=‖<?php echo htmlspecialchars($sid);
+?>‖>
+ <label for=‖start_date‖>Start Date:</label>
+ <input type=‖date‖ id=‖start_date‖ name=‖start_date‖ value=‖<?php echo
+htmlspecialchars($start_date); ?>‖>
+ <label for=‖end_date‖>End Date:</label>
+ <input type=‖date‖ id=‖end_date‖ name=‖end_date‖ value=‖<?php echo
+htmlspecialchars($end_date); ?>‖>
+ <button type=‖submit‖>Search</button>
+ </form>
+ <br><br>
+ <table>
+ <tr>
+ <th>ID</th>
+ <th>AMOUNT</th>
+ <th>DATE & TIME</th>
+ </tr>
+ <?php
+ // Loop through and display all transactions
+ While ($row = mysqli_fetch_assoc($result)) {
+ Echo ―
+ <tr>
+
+
+ <td>‖.$row[‗receiver‘].‖</td>
+ <td>‖.$row[‗amount‘].‖</td>
+ <td>‖.$row[‗time‘].‖</td>
+ </tr>
+ ―;
+ }
+ ?>
+ </table>
+ </div>
+<?php include ‗partials/_footer.php‘ ?>
+ <!—script 
+ <script src=‖js/navscroll.js‖></script>
+</body>
+</html>
+dbconnect.php:
+<?php
+// Connecting to database
+$server = ―localhost‖;
+$username = ―root‖;
+$password = ―S@r$12345‖;
+$database = ―bms‖;
+$conn = mysqli_connect($server, $username, $password, $database);
+If (!$conn){
+ Die(―error : ―.mysqli_connect_error());
+
+
+}
+?>
+Navbar.php:
+<?php
+ Echo‘<div class=‖nevbar‖ id=‖nevbar‖>
+ <div class=‖logo‖>
+ <a href=‖index.php‖ id=‖logo‖><h1><span>UPM</span> Bank</h1></a>
+ </div>
+ <div class=‖menu‖ id=‖menu‖>
+ <ul>
+ <li><a id=‖home‖ href=‖index.php‖>Home</a></li>
+ <li><a id=‖home‖ href=‖all_user.php‖>All Users</a></li>
+ <li><a id=‖home‖ href=‖create_user.php‖>Create User</a></li>
+ <li><a id=‖home‖ href=‖transfer_money.php‖>Transfer Money</a></li>
+ <li><a id=‖home‖ href=‖transfer_log.php‖>Transaction Report</a></li>
+ </ul>
+ </div>
+ <div class=‖menuicon‖>
+ <I id=‖menuicon‖ onclick=‖togglemenu()‖ class=‖fas fa-chevron-circle-down‖>
+<span>MENU</span></i>
+ </div>
+</div>
+<div class=‖topspace‖></div>‘ ;
+?>
+
+Navscroll.php:
+// drop down menu script
+Var menu = document.getElementById(―menu‖);
+Menu.style.maxHeight = ―0px‖;
+Function togglemenu() {
+ If (menu.style.maxHeight == ―0px‖) {
+ Menu.style.maxHeight = ―390px‖;
+ }
+ Else {
+ Menu.style.maxHeight = ―0px‖;
+ }
+}
+Index.css
+{
+ padding: 0;
+ margin: 0;
+ font-family: 'Poppins', sans-serif;
+}
+body {
+ color: whitesmoke;
+ /* text-align: center; */
+}
+***** background cover image *****
+
+.cover {
+ width: 100%;
+ height: 100vh;
+ background-image: url("../images/bnk.jpg");
+ background-size: cover;
+ background-position: center;
+ position: fixed;
+ top: 0;
+ z-index: -200;
+}
+****** home page *****
+.container {
+ max-width: 700px;
+ text-align: center;
+ margin: 0 auto;
+ color: white;
+}
+.welcome {
+ color: white;
+ margin-top: 70px;
+}
+.welcome h3 {
+ font-size: 30px;
+}
+.welcome h1 {
+ font-size: 40px;
+}
+
+
+@media only screen and (max-width : 700px) {
+ .container {
+ text-align: left;
+ }
+ .welcome {
+ margin-top: 40px;
+ padding: 0 6%;
+ }
+ .welcome h3 {
+ font-size: 20px;
+ }
+ .welcome h1 {
+ font-size: 30px;
+ }
+}
+.allbtns {
+ max-width: 400px;
+ margin: 70px auto 0;
+}
+.allbtns a {
+ text-decoration: none;
+}
+.allbtns a button {
+ color: white;
+ cursor: pointer;
+ width: 100%;
+ padding: 15px;
+ margin: 10px 0;
+ background-color: rgba(0, 0, 0, 0.2);
+ border: 2px solid white;
+
+
+ transition: .3s;
+ background: linear-gradient(to right , transparent 50% , rgb(33, 180, 3) 50%);
+ background-size: 200%;
+ background-position: left;
+ font-size: 16px;
+ letter-spacing: 1px;
+}
+.allbtns a button:hover {
+ box-shadow:0px 0px 3px 1px white;
+ background-position: right;
+}
+.allbtns a button i {
+ float: left;
+}
+@media only screen and (max-width : 700px ){
+ .allbtns {
+ margin: 40px auto 0;
+ }
+}
+***** Create User *****
+.create {
+ width: 100%;
+}
+.create h1 {
+ color: white;
+ letter-spacing: 2px;
+ text-align: center;
+ margin-top: 4%;
+
+
+}
+.createUser {
+ display: flex;
+ background-color: transparent;
+ max-width: 700px;
+ align-items: center;
+ margin: 2% auto;
+ padding: 50px 0 50px 50px;
+ border: 2px solid white;
+}
+.userimg img {
+ width: 250px;
+ height: 250px;
+}
+.userdata form{
+ margin: 0 50px;
+}
+.userdata form input {
+ width: 100%;
+ box-sizing: border-box;
+ padding: 10px;
+ margin: 7px 0;
+ background-color: transparent;
+ border: 2px solid white;
+ color: white;
+ outline: none;
+}
+.userdata form button {
+ width: 100%;
+ padding: 10px;
+
+ margin-top: 7px;
+ cursor: pointer;
+ background: linear-gradient(to right , transparent 50% , rgb(3, 180, 3) 50%);
+ background-size: 200%;
+ background-position: left;
+ border: 2px solid white;
+ color: white;
+ transition: .3s;
+}
+.userdata form button:hover {
+ background-position: right;
+}
+** create user mobile view **
+@media only screen and (max-width : 700px ) {
+ .createUser {
+ display: block;
+ background-color: rgba(192, 21, 21, 0);
+ max-width: 700px;
+ align-items: center;
+ margin: 0% auto;
+ padding: 0px 0 0px 0px;
+ border: 0px solid white;
+ }
+ .userimg {
+ display: flex;
+ justify-content: center;
+ padding: 10px 0;
+ }
+ .userimg img {
+
+ width: 200px;
+ height: 200px;
+ }
+ .userdata form{
+ margin: 0 3%;
+ }
+ .userdata form input {
+ width: 100%;
+ box-sizing: border-box;
+ padding: 10px;
+ margin: 7px 0;
+ background-color: transparent;
+ border: 2px solid white;
+ color: white;
+ outline: none;
+ }
+}
+***** Transfer money process *****
+.transferprocess {
+ display: flex;
+ flex-direction: column;
+ max-width: 400px;
+ margin: 70px auto;
+}
+.transferprocess select , .transferprocess input , .transferprocess button {
+ background-color:transparent;
+ color: white;
+ border: 2px solid white;
+
+
+ padding: 10px 15px;
+ margin-bottom: 10px;
+ outline: none;
+}
+.transferprocess select option {
+ color: white;
+ background-color: black;
+}
+.transferprocess button {
+ background: linear-gradient(to right , transparent 50% , rgb(3, 180, 3) 50%);
+ background-size: 200%;
+ background-position: left;
+ transition: .3s;
+ cursor: pointer;
+ letter-spacing: 1px;
+}
+.transferprocess button:hover {
+ background-position: right;
+}
